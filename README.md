@@ -179,5 +179,244 @@ The following parts are optionals. It is user's choice to install with the appli
 - hint(int[] array), if a user guess 3 times, and still can find the number, it gives them a range of the minimum value and the maximum value in the array.
 - resetHistory(), it sets all variables to initial state. If a player wants to play again, then these methods wipes out the told numberOfAttempts, history and feedback to start new.
 
-## Conclusion
-There couple lessons that learned by doing this coding challenge. Since this was my first one, I sometimes spent time on deciding what I should use. Will just a web-page with css, html, and JavaScript suffice, will Nodejs + MySQL + React will be a good choice? I started doing some of each, then revisited my notes and saw that the recruiter had emphasized to use a technology based on the job you applied. At that memoment, I realized that I wasted sometime. Immediately, started planing on Java. The first thing I thought was to build a spring-boot api, but I noticed that a player can't interact directly without the api without prior knowldge of postman, insome and etc. At end decided a CLI app should be enough. Once the application was built, then wondered should I save the history into a file or a database, and finally decided to use MySQL because it runs on MacOS, Windows and Linux. This chanlleged thoght me that best way to learn is to build. I had nevere tried to access mysql from a just a plain java application without a middleware and a server.
+
+## Planing and implentation
+After reviewing the challenge, it was clear that the core of the assignment was finding the correct number and exact location. The steps required to solve this challenge is to draw two arrays and compare them using pen and papper or whiteboard using a T-Table. 
+
+|   randomArray       |userInput                          |result                         |
+|----------------|-------------------------------|-----------------------------|
+|[1,2,3,4] |[1,3,2,4]            | Correct: 2, Incorrect: 2, Wrong: 0            |
+
+Since each element has to have one of the following result =>
+- Correct num and location
+- Correct number but wrong location (incorrect)
+- incorrect number which doesn't exist in the computer's generated list.
+
+As a result each element will require one of the the tree responses of being true/false.
+
+```
+if (correctNumberAtCorrectLocation exist)
+    then (!correctNumberInWrongLocation) 
+      then (!wrongNumber)
+else if (correctNumberinWrongLocation)
+    then (!correctNumberAtCorrectLocation)
+      then(!wrongNumber)
+else
+    wrongNumber = userInput.lengh - (correctNumberAtCorrectLocation+correctNumberinWrongLocation)
+```
+There is no need to test for the third case because the first two cases will determin wheather the third case is true or false. 
+
+This part of the challege consumed lots of time to solve it in a bettr way, but my solution is not good at time and space complexity. The reason is dupulicate values existance in both randomGenerate integers and in user's input. For instance ->
+
+```
+case 1:
+  computerGenerated = [1,1,3,4];
+  userGuess = [1,3,2,4];
+  for (i = 0; i < userGuess.length; i++) {
+    if (userGuess[i] == computerGenerated[i]) {
+      userGuess[0] == computerGenerated[0] is true, so 1 exist in both lists.
+      userGuess[3] == computerGenerated[3] is also true, so 4 exists in both lists.
+      
+      - userGuess[1] != computerGenerated[1] doesn't exist at the correct location.
+      - userGuess[2] != computerGenerated[2] doesn't exist at the correct location.
+    } else {
+      - The main challenge is this else condition. If each element must have on output then the two array indices 0 and 1 should not be compared with the remaing two element in order to find the missplaced digits. 
+      - if the two indices are not ommited from the next for-loops then the out correctNumberInWrongLocation will be true 1 at the index 1. Digit 3 will produce 1 correctNumberInWrongLocation and 4 will produce two results.If we added the numbers of correct and incorrect, it will exceed the total number of elements insert/exits in the array. 1+1 + 1 + 0 + 1+1 = 5. But there are not 5 elements in the input.
+      
+      for (j = 0; j < userGuess.length; j++) {
+        - Below line compares the element which didn't have an exact number and location match in the previous condition, compare it against each element of the computerGenerated random list to find a number which is missplaced. However, the issue is that it will run the comparison against every element which means if the previous condition, in this case index[0], will be compared again, even though, that already had a match.
+
+      if (userGuess[i] == computerGenerated[j]) {
+        - to prevent this issue, we can added another condition such as index of i != index of j.
+        if (i != j) {
+          [1,1,3,4]
+          [1,3,2,4]
+  index -> 0,1,2,3
+          if (i=0) != (j=0)
+          - focus here, indice in these two for-loops don't change. i start at 0, and j starts = 0, so the locations the same.
+          correctNumberInWrongLocation++, is true. 
+        }
+      }
+     }
+    }
+  }
+
+```
+
+Even though the last else condition and loop looks promising there are some test cases that it fails. Let's look at the following arrays.
+
+```
+    computerGenerated = [6,6,1,1]
+    userGuess = [1,2,3,4]
+    outer-for-loop: -> false, false, false, false. No number found at the correct address and location.
+    else
+    inner-for-loop: -> false, false, true, true. 1 != 6, 1 != 6, 1 == 1 and i != j, 1 == 1 and i != j.
+                  : -> false, false, false, false, 2 != elementsInList. Or list.doesn'tContain(2);
+                  : -> false, false, false, false, 3 != elementsInList. Or list.doesn'tContain(3);
+                  : -> false, false, false, false, 4 != elementsInList. Or list.doesn'tContain(4);
+
+      result => correctNumberInWrongLocation: 2, wrongNumber: 2. 
+
+      In fact, the result should have been 1 correctNumberInWrongLocation, and 3 wrongNumbers. Because 2,3, and 4 doesn't exist in the computerGenerated numbers.
+
+
+    computerGenerated = [2,1,1,0]
+    userGues = [2,0,1,0]
+    
+    Output: correctNumberAtCorrectLocation: 2, 1, 0.
+          : correctNumberInWrongLocation: ,
+          : wrongNumber: 0
+    - The extra 0 in the user's input no longer exist because exact value and index location had precedence over others. Therefore, the result = 3 correct, one wrong, zero correctNumberInWrongLocation
+  
+```
+
+As it can been seen the duplicates create lots of issue. To understand this game, I bought a Mastermind game with 4 pegs. I played with my kids and kept thinking about solving the duplicates. My current solution is not good, but it does the job. Here is the patter, After finding the matched numbers, store their indices and replace the value with something out of the domain range. To void modifying the array, copy both elements in a new array and keep replacing the matched values with a new value. My other thinking was to create a new string, and concatenate the unmatch values and their indices and keep remove the matched values untill no match is left. It looked pretty ugly when I did on the whiteboard. I ultimately settled with a solution which will make me happy that it does the job, but makes me feel bad, because the time and space complexity looks horrible.
+
+```
+        int[] tmpArrayResult = new int[difficultyLevelValue];
+        int guessedCorrectAndNumberLocation = 0;
+        int guessedCorrectNumber = 0;
+        int incorrectGuess = 0;
+        - difficultyLevelValue, determins the size of the array at the initial instantiantion.
+
+-> Below two lines are holding values which are not the domain of the assignment. Therefore, when there is a value that matches both arrays, that index's value changes to either -1, or -100 at start, then keeps decrementing to avoid matches. 
+        
+        int exactMatchedFoundInBothArrays = -1;
+        int matched = -100;
+      
+-> To avoid modifying the arrays, below code copies them into two new arrays.
+
+        int[] tmpComputerGeneratedCode = new int[difficultyLevelValue];
+        int[] tmpUserGuess = new int[difficultyLevelValue];
+-> Even though one for-loop does the job, I kept two, but only one suffice.
+
+        for (int i = 0; i < difficultyLevelValue; i++) {
+            tmpComputerGeneratedCode[i] = computerGeneratedNumbers[i];
+        }
+        for (int i = 0; i < difficultyLevelValue.length; i++) {
+            tmpUserGuess[i] = userGuess[i];
+        }
+-> The first double for-loop compares two indices and the value of i and j. then increments the correctNumberAtCorrectLocation and modifies the values in the temporaryArray and repalces the match value with -1. On each match it decrements to avoid comparison with the same value. It will look like this -> [-1, -2, -3, 2].
+        for(int i = 0; i < difficultyLevelValue; i++){
+            for(int j = 0; j < difficultyLevelValue; j++){
+                if(tmpUserGuess[i] == tmpComputerGeneratedCode[j] && i == j){
+                    guessedCorrectAndNumberLocation++;
+                    tmpUserGuess[i] = exactMatchedFoundInBothArrays;
+                    tmpComputerGeneratedCode[j] = exactMatchedFoundInBothArrays; // -1
+                    exactMatchedFoundInBothArrays--;
+                }
+            }
+        }
+-> The double for-loop looks for a value match with different indices. Once it finds then it modifies the temporary array and starts replacing it with -100. The reason for -100, that a user can only attemp 10 times, if it was -10, on the tenth attemp there will be a -10, duplicates from the previous case. To void overlaping, the correctNumberInWrongLocation will start replacing with -100. for example -> [-1, -100, -101...]
+        
+        for(int i = 0; i < difficultyLevelValue; i++){ // 4
+            for(int j = 0; j < difficultyLevelValue; j++){
+                if(tmpUserGuess[i] == tmpComputerGeneratedCode[j] && i != j){
+
+                    guessedCorrectNumber++;
+                    tmpUserGuess[i] = matched;
+                    tmpComputerGeneratedCode[j] = matched; //-100
+                    matched--;
+                }
+            }
+        }
+
+-> I found no need to look for wrongNumber because adding guessedCorrectAndNumberLocation and guessedCorrectNumber then subtracting the userGues.length will give the wrong numbers.  
+
+        incorrectGuess = userGuess.length-(guessedCorrectAndNumberLocation+guessedCorrectNumber);
+
+-> One other way of solving this will inconvient for the player but easier for coder is to ask the user for each element one at a time. 
+computer: -> "Please enter a digit to location/index 1."
+user:-> 6
+computer: -> "Please enter a digit to location/index 2."
+user:-> 3
+....
+if this method, provides the opportunity compare the correct values, but still the challenge of duplicates will be there at some extent.
+```
+
+I believe this part of the challenge is the hardest part. Other requirements are not too challeging.
+
+### Planing for allowing user to see their guesses and feedbacks. 
+Available options:
+  > - Write user's communication to a text file. At thend read from it.
+  > - Write it in RAM memory then display the result.
+  > - Write/read to a database, so it stays there.
+
+  Easiest choice is to write in RAM and read it. The following object can be used to achieve this gaol.
+  Two Dimension Array: 
+  
+  ```
+    String[][] result = [{"john"},{"input"},{"computerGenerated"}];
+  ```
+  The good thing about 2D array is that saving is at a constant log(1) time. Here is why:
+
+  ```
+    result[0][0] = userGuess;
+    result[0][1] = userGuess;
+    result[0][2] = userGuess;
+
+    result[1][0] = userGuess; 
+    result[1][1] = userGuess;
+    result[1][2] = userGuess;
+
+  ```
+
+  Since a counter/numberOfAttemps is used here to keep track of the attemps, it can also serve as an index location.
+  counter = 0, and ...10;
+
+  The other option is create to create a HashMap<Integer, String> and store it like this -> 
+  
+  ```
+  {1: "John, you guess, [1,2,3,4] and feedback was 1 correct, 2 incorect and 1 wrong." }
+  ```  
+  Perhpabs the better choice is to use a database. Thus, I used both a database and the array. The array will show the result for the current player untill the players decides to replay() which will clear the arrays and start from 0. However, the database keep a record of all players who played the game. Due to lack of initial planing, I didn't use relationship which could have been better. For instance, A paly can have many games (result, feedbacks) or many games belongs to a player. In this model, whenever a player enters a his name, the application can find and present the history.
+  The current implentation only stores the gussedValues, winHistory and userName. Duplicate names and null values are allowed.
+  A player must play first then will get his result. A function to allow a player to display all of the records hasn't been implemented, but all it needs to add a function at the start of the game which asks "Enter play to play the game, or history to see yours and others record. 
+
+  ### Random.org, API vs get(url)
+  random.org has upgarded their system and provides free APIs up 1000/month request for certain services. Therefore using their API is a better choice rather then submiting a get-request to 
+
+  ```
+  https://www.random.org/integers/?num=8&min=0&max=7&col=1&base=10&format=plain&rnd=new
+  ```
+  The reason for not chosing this method is the amount work required to converted the return text with lines to an integer array. For example, 
+
+  ```
+  6
+  6
+  7
+  6
+  4
+  0
+  1
+  1
+  ```
+  With this result, the choices are to use regex in order to create an array without the "\n" or use a HashMap<number, "\n">  then push the keys into a new array. Thus, API is a better choice for this operation.
+
+  If you do want to use the above link directly, below is the code -> 
+  
+  ```
+  for (...)
+    Character.isDigit(randIntegerString.charAt(i)))
+  
+  Link: => [ https://docs.oracle.com/javase/7/docs/api/java/lang/Character.html ]
+
+- Use regex
+Link: => [https://www.oracle.com/technical-resources/articles/java/regex.html]
+
+  ```
+
+
+# Conclusion
+There are couple lessons I learned by doing this take home challenge:
+
+- I should have paraphrased the challenge and asked the recuriter to confirm my understanding of the assignment.
+- I should have decided to built the core features first in one of the languages such as Java or JavaScript that I feel comfortable.
+- I should have avoided trying to build a full stack App such as using Ruby on Rails as a backend or using Nodejs + express + MySQL, and REACT as a frontend.
+- I should have analyzed my hours because I spend 9 hours work, and other couple hours for for taking care of my children. 
+- if I had realized that I can't work more than 2 to 4 hours on the project on one sitting, I could have built a better app.
+- Documentation took longer than I expected. It is crucial to plan and reserve enough hours for documenting your work. 
+- I shouldn't have hestiated to contact my recruiter when I needed clarification.
+
+
+There are couple lessons that I learned by doing this coding challenge. Since this was my first one, I sometimes spent time on deciding what I should use. Will just a web-page with css, html, and JavaScript suffice, will Nodejs + MySQL + React will be a good choice? I started doing some of each, then revisited my notes and saw that the recruiter had emphasized to use a technology based on the job you applied. At that memoment, I realized that I wasted sometime. Immediately, started planing on using Java. The first thing I thought was to build a spring-boot api, but I noticed that a player can't interact directly with the api without prior knowldge of Postman, Insomnia and etc. At the end decided a CLI app should be enough. Once the application was built, then wondered should I save the history into a file or a database, and finally decided to use MySQL because it runs on MacOS, Windows and Linux. This chanlleged thought me that best way to learn is to build. I had nevere tried to access mysql from a just a plain java application without a middleware and a server, once I did, now I know there is no limit what you can built. It only requires patience and guidance.
