@@ -192,11 +192,11 @@ The following parts are optionals. It is user's choice to install with the appli
 ## Planning and implantation
 After reviewing the challenge, it was clear that the core of the assignment was finding the correct number and exact location. The steps required to solve this challenge is to draw two arrays and compare them using pen and paper or a whiteboard using a T-Table.
 
-<img src="https://github.com/menhaj007/reach_mastermind/blob/main/board1.jpg" alt="initial planing" width="400"/>
+<img src="https://github.com/menhaj007/reach_mastermind/blob/main/board1.jpg" alt="initial planing" width="350"/>
 
-<img src="https://github.com/menhaj007/reach_mastermind/blob/main/board2.jpg" alt="initial planing" width="400"/>
+<img src="https://github.com/menhaj007/reach_mastermind/blob/main/board2.jpg" alt="initial planing" width="350"/>
 
-<img src="https://github.com/menhaj007/reach_mastermind/blob/main/board3.jpg" alt="initial planing" width="400"/>
+<img src="https://github.com/menhaj007/reach_mastermind/blob/main/board3.jpg" alt="initial planing" width="350"/>
 
 
 |  randomArray       |userInput                          |result                         |
@@ -204,7 +204,7 @@ After reviewing the challenge, it was clear that the core of the assignment was 
 |[1,2,3,4] |[1,3,2,4]            | Correct: 2, Incorrect: 2, Wrong: 0            |
 
 Since each element has to have one of the following results =>
-- Correct num and location
+- Correct number and location
 - Correct number but wrong location (incorrect)
 - incorrect number which doesn't exist in the computer's generated list.
 
