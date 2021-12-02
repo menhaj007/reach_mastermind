@@ -428,6 +428,7 @@ The following features were attempted but not built:
 - Frontend REACT, backend Nodejs+express+MySQL
 - Inquirer plus Nodejs+express+MySQL
 - Basic CSS, HTML and JavaScript
+- One to many relationship
 
 # Conclusion
 There are couple lessons I learned by doing this take home challenge:
