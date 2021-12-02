@@ -8,10 +8,11 @@ This is documentation is a guide on how to install and use the application. The 
 - Attempted extra features.
 
 ## Installation
-This application is built with Java 11 and MySQL server Version 8. A part of the application includes JUnit testing framework to test the curial or the core function of the application. The instruciton provided here is based on the IntelliJ IDEA community edition IDE. Finally, there is a need for an API key (provided for this purpose) for random.org's API to access their random generator API. The two JAR files one for MySQL dependency and another for API is also provided with needs to be added into the module before being able to use the application.
+This application is built with Java 11 and MySQL server Version 8. Furthermore, JUNIT 5 is used to test the core functions. This guide will demonstrate how to use install the required software to test and rung this Application. IntelliJ IDEA IDE is used to implement this project. If you are using Eclipse or VS-Code this instruction may not work. Since random.org provides an API for ease access to use their Random Integer generate application, you will need an API key to connect to random.org API. There are two JAR files one for MySQL dependency and another for Random Generator API inside the repository which need to be added into the project module in order to connect to MySQL and random.org’s website.
 
-- To Download Java 11, please reference to this link https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html
-- To install Java 11, please refer to this link https://docs.oracle.com/en/java/javase/11/install/
+- To Download Java 11, please visit => 
+https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html
+- To review Java 11 installation process, please refer to this link https://docs.oracle.com/en/java/javase/11/install/
 - To install MySQL Server community edition, please follow the following link https://dev.mysql.com/downloads/mysql/
 - For help on how to use MySQL, click on the following link https://dev.mysql.com/doc/
 - This link shows how to add a dependency/jar file into a java project in IntelliJ https://stackoverflow.com/questions/30651830/use-jdbc-mysql-connector-in-intellij-idea
@@ -19,27 +20,27 @@ This application is built with Java 11 and MySQL server Version 8. A part of the
 - Note: you don't need mysql server, if ou prefer to read and write guess history in the RAM. MySQL is used for resistance purposes.
 - To download the jar files, please visit the GitHub link -> https://github.com/menhaj007/jarsFiles
 
-## Core requirements of this project is list below.
-### Preparing the System for the project.
+## Core requirements of this project are list below
+### Developing environment for running this project.
 1. To make sure you have Java 11 installed, type in the terminal
 ```
 $: java -version
 =>: Similiar Output:
-v openjdk version "11.0.11" 2021-04-20
-=>: openJDK runtime Environment OS..
-=>: openJDK 64bit Server VM..
+ openjdk version "11.0.11" 2021-04-20
+=>: openJDK runtime Environment OS…
+=>: openJDK 64bit Server VM…
 ```
 2. Please make sure you have IntelliJ Idea installed. You can also download here ->
    -- https://www.jetbrains.com/idea/
 3. Random API generator.
-   --  You can create your own API, or can you the temporary one available inside the project.
+   --  You can create your own API, or can you use the temporary one available inside the project.
    -- Download the Random Generator jar dependency, and review the installation provided on the link here ->
    https://github.com/menhaj007/jarsFiles
 
-This meets all the requirements to test the core feature of the application such as logic, feedback, history and output. However, if you do want to use it at this level, please comment out all methods in Mastermind.java where it marked as DBMethod.
-If you want to test with MySQL and JUNIT, the following steps are required.
+This meets all the requirements to test the core feature of the application such as logic, feedback, history and output. However, if you do want to use just the core requirements, please comment out all methods in Mastermind.java where the signature includes the word “write/read from DB/IntoDB”.
+If you want to test the project with MySQL and JUNIT features, please follow the next step too.
 
-4. install MySQL Database from the above links. Once install either using workbench or command line, issue the following commands to create database and make it active:
+4. Install MySQL Database from the above link. Once installed either use workbench or command line, to issue the following commands in order to create a database and make it active:
    -- change the path location for jdbc, so it matches your computer's information.
 ```
 public static void readFeedbackFromDB() {
@@ -57,13 +58,13 @@ public static void readFeedbackFromDB() {
         }
     }
 ```
-- Visit this link for more information:
+- Visit this link for more information =>
   -- https://zetcode.com/db/mysqljava/#:~:text=To%20connect%20to%20MySQL%20in%20Java%2C%20MySQL%20provides,does%20not%20rely%20on%20the%20MySQL%20client%20libraries.
 ```
 CREATE database mastermind; 
 use mastermind;
 ```
-5. create tables;
+5. Create the following tables;
 ```
 CREATE TABLE computer_feedback(
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -85,7 +86,7 @@ CREATE TABLE user_name_feedback_guess(
     guess VARCHAR(250) NULL
 );
 ```
-Use the following commands to delete a table, check the structure of the table.
+Use the following commands to delete a table, check the structure of a table.
 ```
 show tables;
 desc table_name;
@@ -99,9 +100,9 @@ SELECT * FROM user_input_history;
 https://github.com/menhaj007/jarsFiles
 ```
 
-Now, your IDE should be able to run the application. For more information about using mysql with Java, please visit the following link.
+Now, your IDE should be able to run the application. For more information about using MySQL with Java, please visit the following link.
 -- https://zetcode.com/db/mysqljava/#:~:text=To%20connect%20to%20MySQL%20in%20Java%2C%20MySQL%20provides,does%20not%20rely%20on%20the%20MySQL%20client%20libraries.
-7. Unit is import into the project but haven't been used in its full effect. There are links provided, if you want to use a JUnit library. Version 4 and 5 will work.
+7. JUnit is import into the project but haven't been used in its full effect. There are links provided, if you want to use a JUnit library. Version 5 will work.
 - https://it-qa.com/how-do-i-get-junit-5-in-intellij/
 - https://www.jetbrains.com/help/idea/junit.html
 
@@ -119,9 +120,9 @@ Instructions on how to use them in your own application are linked below.
 | Random.org API | [https://github.com/menhaj007/jarsFiles/blob/main/mysql-connector-java-8.0.27.jar] |
 | JUNIT | [https://github.com/menhaj007/jarsFiles/blob/main/org_junit_platform_junit-platform-console-standalone_1.6.0_junit-platform-console-standalone-1.6.0.jar] |
 
-There is a folder inside the project directory named jarFiles (https://github.com/menhaj007/reach_mastermind/tree/main/src/jarFiles) which includes all of the required dependencies for this project. If you clone this repository, you will have inside the project.
+There is a folder inside the project directory named jarFiles (https://github.com/menhaj007/reach_mastermind/tree/main/src/jarFiles) that includes all of the required dependencies for this project. If you clone this repository, you will have them inside the project.
 
-## Link for JavaDoc
+## Link for Java Documentation
 - Please open java-documentation link on this repository and open index.html then select preview or open in a browser tab to read the documentation for this application
 -- https://github.com/menhaj007/reach_mastermind/blob/main/src/JavaDocsReadMe/index.html
 
@@ -132,25 +133,25 @@ There is a folder inside the project directory named jarFiles (https://github.co
 - First install Java 11, MySQL, MySQL-workbench
 - Run the provided SQL commands
 - Download the application from this repository
-- Obtain an API key from Random.org and then add the key inside the RangomGenerator.java class wher it says API key
+- Obtain an API key from Random.org and then add the key inside the RangomGenerator.java class where it says API key
 - Add dependencies which are provided inside this repository/project in the dependency module
 - Finally, using IntelliJ IDEA, open the GameRunner.java and click run right top-right side of the IDE.
--- If you see red errors from the database, that means you didn't SQL commands or didn't follow instruction for jdbc driver. However, without the database function, you will be able to test and run the application, but won't able to save the feedbacks and guessed history in the database.
+-- If you see red errors from the database, that means the database connection is not working properly or the SQL commands were not issued, jdbc driver path is not correct. However, without the database function, you will be able to test and run the application, but won't able to save the feedbacks and guessed history in the database.
 
 ## Variables and Methods in the application
 #### There is a java-documentation as mentioned above this paragraph that has comments regarding the application and its variables and methods and their functions. Below a list of the variables and methods just for quick reference.
 The following variables are used at global scope.
-- [computerPoints], initialized with 10. On Each correct guess, these points are deducted
-- [userPoints], initialized with the value of 10. On each wrong guess, user loses points.
-- [-difficultyLevelValue], There are 3 levels in this game. If user enters 1, the value of this variable changes to 4. Which means, the random number will consist of an array integer with length 4. If user's choice 2, the array length will be 6, and 3 will consist of 8 elements. The user's input also reduce the maximum number of tries to from 10, 8, 5 respectively.
-- [numberOfAttemps], the default value is 10. But it will change when user chooses a difficult level and if user keep guessing the number. It will reset when user agrees to play again.
-- [computerFeedback], type String, this is a 2 Dimension array. A player's feedback is copied here to the player can review either after failing the game or winning the game. This method doesn't automatically push the data to MySQL. It is just in memory access data.
-- [guessHistory], type String, will hold the information about the users guesses only to keep the record cleaner for review.
-- [numberOfSavedFeedback]
-- [numberSavedHistory]
+- computerPoints, initialized with 10. On Each correct guess, these points are deducted
+- userPoints, initialized with the value of 10. On each wrong guess, user loses points.
+- difficultyLevelValue, there are 3 levels in this game. If user enters 1, the value of this variable changes to 4. Which means, the random number will consist of an array of integers with length of 4. If user's choice is 2, the array length will be 6, and 3 will consist of 8 elements. Finally, as the level of difficulty increases, the number of attempts decreases from 10, 8, to 5 tries respectively.
+- numberOfAttemps, the default value is 10. But it will change when user chooses a difficult level and if user keep guessing the number. It will reset when user agrees to play again.
+- computerFeedback, type String, this is a 2 Dimension array. A player's feedback is copied here to the player can review either after failing the game or winning the game. This method doesn't automatically push the data to MySQL. It is just in memory access data.
+- guessHistory, type String, will hold the information about the users guesses only to keep the record cleaner for review.
+- numberOfSavedFeedback
+- numberSavedHistory
 - The last two variables are used to keep track of the saved results and feedbacks to avoid unnecessary loops for null values.
-- [userName], This will record a player's name on the initial start and will be saved with each player's game cycle.
-- [isWin], keep status of the while loop to avoid unnecessary loops. It is declared at global scope to provide flexibility for the other methods.
+- userName, This will record a player's name on the initial start and will be saved with each player's game cycle.
+- isWin, keep status of the while loop to avoid unnecessary loops. It is declared at global scope to provide flexibility for the other methods.
 
 The following Methods are designed to either communicate with the user or serve as a helper method.
 
@@ -180,14 +181,14 @@ The following parts are optionals. It is user's choice to install with the appli
 - resetHistory(), it sets all variables to initial state. If a player wants to play again, then these methods wipes out the told numberOfAttempts, history and feedback to start new.
 
 
-## Planing and implentation
-After reviewing the challenge, it was clear that the core of the assignment was finding the correct number and exact location. The steps required to solve this challenge is to draw two arrays and compare them using pen and papper or whiteboard using a T-Table. 
+## Planning and implantation
+After reviewing the challenge, it was clear that the core of the assignment was finding the correct number and exact location. The steps required to solve this challenge is to draw two arrays and compare them using pen and paper or a whiteboard using a T-Table. 
 
-|   randomArray       |userInput                          |result                         |
+|  randomArray       |userInput                          |result                         |
 |----------------|-------------------------------|-----------------------------|
 |[1,2,3,4] |[1,3,2,4]            | Correct: 2, Incorrect: 2, Wrong: 0            |
 
-Since each element has to have one of the following result =>
+Since each element has to have one of the following results =>
 - Correct num and location
 - Correct number but wrong location (incorrect)
 - incorrect number which doesn't exist in the computer's generated list.
