@@ -1,8 +1,8 @@
 package main;
-
 import com.github.iarks.RandomOrgAPI.InvalidMethodCallException;
 import com.github.iarks.RandomOrgAPI.InvalidResponseException;
 import com.github.iarks.RandomOrgAPI.RandomNumber;
+
 public class RandomIntegerGenerator {
     public static int[] getRandomNumber(int n, int max, int min, boolean replacement, String method) {
         int number = 0, bitsLeft, bitsUsed, requestsLeft;

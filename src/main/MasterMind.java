@@ -1,64 +1,64 @@
 package main;
-
 import java.util.*;
-
 /**
  * Core requirement of MasterMind is implemented in this class.
  *
+ * @see ConnectToMySQL has the jdbc driver to establish connection with MySQL.
+ * @see GameRunner includes the "main" method to run the application
+ *
  * @see #start()
- * @See #play()
- * @See #userInput()
- * @See #calculate()
- * @See #calulate()
- * @See #result()
- * @See #isPlayAgain()
- * @See #restHistory()
- * @See #getFeedback()
- * @See #getHistory()
+ * @see #play()
+ * @see #readUserInput()
+ * @see #calculate(int[] computerGeneratedNumbers, int[] userGuess)
+ * @see #result(int counter)
+ * @see #isPlayAgain(String response)
+ * @see #resetHistory()
+ * @see #getGuessHistory() ()
+ * @see #getFeedbackFromArray() 
  *
  */
 public class MasterMind {
-
     /**
      * No-argument constructor.
      */
     public MasterMind() {}
-
     /**
      * Accepts user input in command line.
+     * @Field #userInput built-in library which accepts userInput.
      *
-     * @See #start()
-     * @See #play()
+     * @see #start()
+     * @see #play()
      */
     Scanner userInput = new Scanner(System.in);
-
+    /** @Field #computerPoints at the beginning each has 10 */
     double computerPoints = 10;
-    double userPoints = 10; //need think about calculating this.
+    /** #Field #userPoints if user guesses wrong numbers points will be deducted.*/
+    double userPoints = 10;
+    /** @Field #difficultyLevelValue this variable defines the number of random generated values. Default is 4.*/
     private  int difficultyLevelValue = 4;
-
     /**@Field #numberOfAttemps if a user can't win in 10 attempts, game will stop.*/
     int numberOfAttempts = 10;
-
     /**
      * It generates a 2D array to store the computer's generated feedback for later access.
      *
-     * @See #saveFeedback()
-     * @See #getFeedback()
+     * @see #saveFeedbackToArray(int, String, String, String)
+     * @see #getFeedbackFromArray()
      */
-    String[][] computerFeedback = new String[10][3]; // add another table in mysql to save this.
+    String[][] computerFeedback = new String[10][3];
     /**
      * It generates a 2D array to store a user's entered guess as history of inputs.
      *
-     * @See #saveGuessHistory()
-     * @See #getHistory()
+     * @see #saveGuessHistory(String)
+     * @see #getGuessHistory()
      */
-    String[][] guessHistory = new String[10][2]; //edit this line to add userName and History.
+    String[][] guessHistory = new String[10][2];
     /**
-     * @Field @numberOfSavedBack increments the index location to keep track of the inserted elements
+     * @Field #numberOfSavedFeedback increments the index location to keep track of the inserted elements
      * to avoid unnecessary loop for empty/null elements in the array.
      */
     int numberOfSavedFeedback = 0;
-    int numberOfSavedHistory = 0;
+    /** @Field #numberOfSavedGuessedHistory increments the index location to keep track of addition to the array */
+    int numberOfSavedGuessedHistory = 0;
     /**
      * @Field #userName when the game starts, it records for the player's name to save it in the database with the result.
      * It only changes when console re-runs.
@@ -68,37 +68,35 @@ public class MasterMind {
      * @Field #userId the intention was to build a one to many relationship for mysql and use UserId to connect them.
      * But due to the time constrains, it is not implemented.
      */
-    //int userId = 0;
-    /**@Field #isWin is used to keep track of the game, if a player wins then it becomes false and loop stops. */
+    /** @Field #isWin is used to keep track of the game, if a player wins then it becomes false and loop stops. */
     boolean isWin = false;
-    //generate random numbers and store.
     /**
-     * Start asks the user's name and saves it at global scope, then call play() method to start the actual logic.
-     * @See #play()
+     * Starts the game by asking the user's name and saves it at global scope, then calls play() method to start the actual logic.
+     * @see #play()
      */
     public void start() {
         System.out.println("Please enter your name. ex: James");
         userName = userInput.next();
         play();
     }
-
     /**
-     * Play starts to initial the core logic of the game. It asks for user's input, generates random numbers, call the
-     * calculate method and change the value of iSWin and numberOfAttempts.
+     * Play starts the initial core logic of the game. It asks for user's input, generates random numbers, calls
+     * the calculate(int[] a, int[] b) method and change the value of iSWin and numberOfAttempts.
      *
-     * @See #calculate()
-     * @See #isWin
-     * @See #numberOfAttempts
-     * @See #isPlayAgain()
-     * @See #result()
-     * @See #getHistory()
+     * @see #calculate(int[], int[])
+     * @see #isWin
+     * @see #numberOfAttempts
+     * @see #isPlayAgain(String)
+     * @see #result(int)
+     * @see #getGuessHistory()
      */
     public void play() {
         System.out.println("Please choose your difficulty level.");
         chooseDifficultyLevel();
         System.out.println("Computer generating a random number");
         int[] computerGeneratedNumbers = generateRandomNumbers();
-        System.out.println("Computer generated " + Arrays.toString(computerGeneratedNumbers)); //remove it before final
+        /** Below print is used for dev testing only */
+        System.out.println("Computer generated " + Arrays.toString(computerGeneratedNumbers));
 //        Countdown.startCountdown();
         int counter = 0;
         while (!isWin && numberOfAttempts > 0) {
@@ -114,24 +112,22 @@ public class MasterMind {
                 String checkResponse = userInput.next();
                 isPlayAgain(checkResponse);
             }
-
-            getFeedback();
+            getFeedbackFromArray();
             if (counter > 3) {
                 hint(computerGeneratedNumbers);
             }
             numberOfAttempts--;
             counter++;
         }
-        getHistory();
+        getGuessHistory();
     }
-
     /**
      * chooseDifficultyLevel method asks the user for difficulty level then it sets the RandomGenerator's API
      * to generate one of the followings. 1 will generate an array with 4 random values. 2 will generate 6 elements and
-     * 3 will generate 8 elements. It also decreses the number attempts from 10 to 8, 6 and 5. It makes it harder.
+     * 3 will generate 8 elements. It also decreases the number attempts from 10 to 8, 6 and 5. It makes it harder.
      *
-     * @See #generateRandomNumbers()
-     * @See #difficultyLevelValue
+     * @see #generateRandomNumbers()
+     * @see #difficultyLevelValue
      */
     public void chooseDifficultyLevel() {
         boolean valid = false;
@@ -158,57 +154,26 @@ public class MasterMind {
         } while (!valid);
     }
     /** It makes a get request to generate random numbers. The size of the request is impacted by
-     * @See #chooseDifficultyLevel()
+     * @see #chooseDifficultyLevel()
      * */
     public int[] generateRandomNumbers() {
-        int tmpN = 4, max = 7, min = 0;
-        boolean tmpReplacement = false;
-        String tmpMethod = "method1";
-        if (difficultyLevelValue == 4) { // No need for this line.
-            tmpN = 4; max = 7; min = 0; tmpReplacement = false;
-            numberOfAttempts = 10;
-        } else if ( difficultyLevelValue == 6) {
-            tmpN = 6;
-            max = 8; min = 0; tmpReplacement = false;
-            numberOfAttempts = 8;
+        int n = 4, max = 7, min = 0;
+        boolean replacement = false;
+        String method = "method1";
+        if ( difficultyLevelValue == 6) {
+            n = 6;
+            max = 8;
         } else if (difficultyLevelValue == 8) {
-            tmpN = 8;
-            max = 9; min = 0; tmpReplacement = false;
-            numberOfAttempts = 6;
+            n = 8;
+            max = 9;
         }
-        int[] defaultRandomRange = null;
-        if (difficultyLevelValue == 4) {
-            defaultRandomRange = new int[4];
-            for (int i = 0; i < defaultRandomRange.length; i++) {
-                defaultRandomRange[i] = (int) (Math.random()* 7);
-            }
-            return defaultRandomRange;
-        } else if (difficultyLevelValue == 6) {
-            defaultRandomRange = new int[6];
-            for (int i = 0; i < defaultRandomRange.length; i++) {
-                defaultRandomRange[i] = (int) (Math.random()* 8);
-            }
-            return defaultRandomRange;
-        } else if (difficultyLevelValue == 8) {
-            defaultRandomRange = new int[8];
-            for (int i = 0; i < defaultRandomRange.length; i++) {
-                defaultRandomRange[i] = (int) (Math.random()* 9);
-            }
-            return defaultRandomRange;
-        } else {
-            defaultRandomRange = new int[4];
-            for (int i = 0; i < defaultRandomRange.length; i++) {
-                defaultRandomRange[i] = (int) (Math.random()* 7);
-            }
-            return defaultRandomRange;
-        }
-//        return RandomIntegerGenerator.getRandomNumber(tmpN, max, min, tmpReplacement, tmpMethod);
+        return RandomIntegerGenerator.getRandomNumber(n, max, min, replacement, method);
     }
-
     /**
      * ReadeUserInput accepts user's input then validates. If the number is wrong, the allows the user to re-enter.
-     * @return #convertStringToArrayOfInteger(String userGuess) it returns an array of integers.
-     * @See #convertStringToArrayOfInteger()
+     *
+     * @return #convertStringToArrayOfInteger(String userGuess) first converts the user's input then returns an array of integers.
+     * @see #convertStringToArrayOfInteger(String)
      */
     public int[] readUserInput() {
         String userGuess = userInput.next();
@@ -217,13 +182,13 @@ public class MasterMind {
             userGuess = userInput.next();
         }
         saveGuessHistory(userGuess);
-        return convertStringToArrayOfInteger(userGuess); // it is referencing the object. Which can cause problems later.
+        return convertStringToArrayOfInteger(userGuess);
     }
     /**
      * isValid accepts a string input then converts to integer, and it also validates the domain for the input values.
      * If digits are less 0 (negative) and greater than (9), return false, and if userInput's guess length doesn't match
      * the computer the chosen difficulty level, it returns false.
-     * @param userGuess
+     * @param userGuess is a string value entered by the user as an input.
      * @return if length and values are not valid, it returns false.
      */
     private boolean isValid(String userGuess) {
@@ -235,7 +200,6 @@ public class MasterMind {
         }
         return userGuess.length() == difficultyLevelValue;
     }
-
     /**
      * ConvertStringToArrayOfInteger accepts string and returns an array of integers.
      * @param data userInput
@@ -248,7 +212,6 @@ public class MasterMind {
         }
         return tmp;
     }
-
     /**
      * Calculate accepts two arrays, one randomNumbers generated by the computer and the converted userGuess. It then compares both by indices.
      * If exact value matches an exact index, then it increments @Field #guessedCorrectAndNumberLocation,
@@ -259,94 +222,93 @@ public class MasterMind {
      *
      * Exact digit and index position has precedence over others. The first match has precedence over second math.
      * It is only match with one value, if there are two {1,1}, {1,2}, only the first correct match increments.
-     * @param computerGeneratedNumbers
-     * @param userGuess
+     *
+     * @param #computerGeneratedNumbers
+     * @param #userGuess
      * @return integer correct guess with correct index location which determines if a player wins/loses the game.
-     * @See #play()
-     * @See #getHistory()
-     * @See #getFeedback()
-     * @See #saveToDB()
+     * @see #play()
+     * @see #getGuessHistory() ()
+     * @see #getFeedbackFromArray() ()
+     * @see #saveFeedbackToArray(int, String, String, String) ()
+     * @Field #guessedCorrectAndNumberLocation keeps track of the correct number and its matched index location.
+     * @Field #guessedCorrectNumber keep track of a number which exist both user's input and computer's random generated number
+     * @Field #incorrectGuess if the first two conditions are false, then it is true. userGuess.length - (guessedCorrectAndNumberLocation+ guessedCorrectNumber)
+     * @Field #exactMatchedFoundInBothArrays
+     * @Field #mathed a user's input element matched with an element in the computer generated list.
+     * @Field #tmpComputerGeneratedCode copies the data from the original computer generated to modified it when iterating.
+     * @Field #tmpUserGuess copies the data from the original user's input to modified it when iterating.
+     * @Field #objResult copies the digits into the database for later use.
+     * @see #writeFeedbackIntoDB(HashMap)
+     * @see #saveFeedbackToArray(int, String, String, String) () writes in the RAM memory.
+     * @see #writeInputHistoryIntoDB(String, String) ()
      */
     public int calculate(int[] computerGeneratedNumbers, int[] userGuess) {
         int[] tmpArrayResult = new int[difficultyLevelValue];
         int guessedCorrectAndNumberLocation = 0;
         int guessedCorrectNumber = 0;
         int incorrectGuess = 0;
-        int matchedBoth = -1; // it is for tmp array. make sure it doesn't overlap with matched = -10
-        int matched = -100; // not changing.
-        //Creating arrays to keep track of matched values.
+        int exactMatchedFoundInBothArrays = -1;
+        int matched = -100;
         int[] tmpComputerGeneratedCode = new int[difficultyLevelValue];
         int[] tmpUserGuess = new int[difficultyLevelValue];
-
-        //merge the two.
         for (int i = 0; i < tmpUserGuess.length; i++) {
             tmpComputerGeneratedCode[i] = computerGeneratedNumbers[i];
         }
         for (int i = 0; i < tmpUserGuess.length; i++) {
             tmpUserGuess[i] = userGuess[i];
         }
-        for(int i = 0; i < userGuess.length; i++){ //Outer loop is the user guess.
-            for(int j = 0; j < userGuess.length; j++){ //Inner loop is computer SecCode.
-                if(tmpUserGuess[i] == tmpComputerGeneratedCode[j] && i == j){ // For each user input at index[i] loop through the entire secCode
-                    // to find a match. i == j, on Both location and value
+        for(int i = 0; i < userGuess.length; i++){
+            for(int j = 0; j < userGuess.length; j++){
+                if(tmpUserGuess[i] == tmpComputerGeneratedCode[j] && i == j){
                     guessedCorrectAndNumberLocation++;
-//                        System.out.println("Correct on both : " + userGuess[i] + "=" +  computerGeneratedNumbers[j]);
-                    tmpUserGuess[i] = matchedBoth; //-1, decrement to not find the match. There is no negative because domain. user[i] > -1.
-                    tmpComputerGeneratedCode[j] = matchedBoth; // -1
-                    matchedBoth--; // decrement to -2, to avoid positive matches.
+                    tmpUserGuess[i] = exactMatchedFoundInBothArrays;
+                    tmpComputerGeneratedCode[j] = exactMatchedFoundInBothArrays; // -1
+                    exactMatchedFoundInBothArrays--;
                 }
             }
         }
-        //I am select each element of userInput and comparing it against the entire elements of SecCode.
         for(int i = 0; i < userGuess.length; i++){ // 4
             for(int j = 0; j < userGuess.length; j++){
-                if(tmpUserGuess[i] == tmpComputerGeneratedCode[j] && i != j){ //computer userGuess to secCode. On unmatched position.
+                if(tmpUserGuess[i] == tmpComputerGeneratedCode[j] && i != j){
                     guessedCorrectNumber++;
-//                        System.out.println("Incorrect position : " + userGuess[i] + "=" +  computerGeneratedNumbers[j]);
                     tmpUserGuess[i] = matched;
                     tmpComputerGeneratedCode[j] = matched;
                     matched--;
                 }
             }
         }
-
         incorrectGuess = userGuess.length-(guessedCorrectAndNumberLocation+guessedCorrectNumber);
         String correctResult = "Correct number & location: " + guessedCorrectAndNumberLocation;
         String incorrectResult = "Correct number only: " + guessedCorrectNumber;
         String incorrectGuessResult = "Incorrect: " + incorrectGuess;
-
         HashMap<String, Integer> objResult = new HashMap<String, Integer>();
         objResult.put("correctNumberLocation", guessedCorrectAndNumberLocation);
         objResult.put("correctNumberOnly", guessedCorrectNumber);
         objResult.put("incorrectGuess", incorrectGuess);
         writeFeedbackIntoDB(objResult);
-        saveFeedback(numberOfSavedFeedback,correctResult, incorrectResult, incorrectGuessResult);
-        //saveFeedbackToMySQL
-        //saveToDatabase
+        saveFeedbackToArray(numberOfSavedFeedback,correctResult, incorrectResult, incorrectGuessResult);
         String tmpGuess = Arrays.toString(userGuess);
         String tmpFeedback = correctResult +" | " + incorrectGuessResult +" | " + incorrectGuessResult;
         writeFeedbackGuessToDB(userName, tmpFeedback, tmpGuess);
         System.out.println("Printing... You guessed -> " + Arrays.toString(userGuess));
         return guessedCorrectAndNumberLocation;
     }
-
     /**
      * Result displays the number of attempts it took the player to win.
-     * @param counter
-     * @return
+     * @param counter just keep record of the while loop.
+     * @return "You Won! in " + (counter) + " attempts";
      */
     public String result(int counter) {
         return "You Won! in " + (counter) + " attempts";
     }
-
     /**
-     * IsPlayAgain asks the user to make a decision after winning or losing the game. The choices are
+     * IsPlayAgain asks the user to make a decision after winning or losing the game. The choices are:
      * Do you want to play again?
      * Do you want to check the history for input and feedback output?
      * It also retrieves the history from the database where it displays the result and feedback from other players.
      * @param checkResponse pass three strings 1. yes, 2. history, 3. no. Based on these the method decides where to lead
      *                      the user.
-     * @See @play().checkResponse()
+     * @see #play()
      */
     private void isPlayAgain(String checkResponse) {
         boolean answer = false;
@@ -357,8 +319,8 @@ public class MasterMind {
             play();
         } else if (checkResponse.equalsIgnoreCase("history")) {
             System.out.println("Below is your history of the players");
-            readFeedback();//database user_result
-            getHistory();
+            readFeedbackFromDB();//database user_result
+            getGuessHistory();
             //read from dB
             readFeedbackGuessFromDB();
             System.out.println("What would you like to do now? Yes -> play again. No -> exit.");
@@ -372,19 +334,18 @@ public class MasterMind {
         } else if (checkResponse.equalsIgnoreCase("no")) {
             System.out.println("Bye bye, thanks for playing.");
             System.out.println("Below is your game history and feedbacks.");
-            getHistory();
-            getFeedback();
+            getGuessHistory();
+            getFeedbackFromArray();
             System.exit(0);
         } else {
             System.out.println("Unknown entry, shutting down...");
             System.exit(0);
         }
     }
-
     /**
      * Hint triggers when a play can't win in 3 guesses, then it gives a feedback for the minimum and maximum values
      * to help the user.
-     * @param array
+     * @param array accepts an array and returns the min and max values.
      * @return an array with two indices a[0] = min, a[1] = max. The only purpose for this return is to test the function.
      */
     private int[] hint(int[] array) {
@@ -404,9 +365,8 @@ public class MasterMind {
         tmpArr[1] = maximum;
         return tmpArr;
     }
-
     /**
-     * Reset History, resets the history when a player wins then tries to play again, therefore, the following variables are
+     * ResetHistory, resets the history when a player wins then tries to play again, therefore, the following variables are
      * affected with this method.
      * @Field #numberOfAttempts
      * @Field #numberOfSavedFeedback
@@ -415,47 +375,42 @@ public class MasterMind {
      * @Field #computerFeedback
      * @Field #guessHistory
      *
-     * @See #play()
-     * @See #isPlayAgain()
+     * @see #play()
+     * @see #isPlayAgain(String)
      */
     private void resetHistory() {
         numberOfAttempts = 10;
         numberOfSavedFeedback = 0;
-        numberOfSavedHistory = 0;
+        numberOfSavedGuessedHistory = 0;
         isWin = false;
         computerFeedback = new String[10][3];
         guessHistory = new String[10][2];
-        //userId = 0;
     }
-
     /**
-     * Saves feedback in the RAM to display it back to the user.
+     * SaveFeedbackToArray Saves feedback in the RAM to display it back to the user.
      * @param index
      * @param correctNumLoc
      * @param incorrectNum
      * @param incorrectEntry
      * @return returns a string of array for testing purpose.
      */
-    //Save/Read from RAM.
-    private String[] saveFeedback(int index, String correctNumLoc, String incorrectNum, String incorrectEntry) {
+    private String[] saveFeedbackToArray(int index, String correctNumLoc, String incorrectNum, String incorrectEntry) {
         System.out.println("Saving the result.");
         computerFeedback[index][0] = correctNumLoc;
         computerFeedback[index][1] = incorrectNum;
         computerFeedback[index][2] = incorrectEntry;
         numberOfSavedFeedback++;
-
         String[] guessedResult = new String[3];
         guessedResult[0] = correctNumLoc;
         guessedResult[1] = incorrectNum;
         guessedResult[2] = incorrectEntry;
         return guessedResult;
     }
-
     /**
-     * GetFeedback reads feedback from RAM for display purpose only. If game stops, the data is lost.
+     * GetFeedbackFromArray reads feedback from RAM for display purpose only. If game stops, the data is lost.
      * @return
      */
-    private int getFeedback() {
+    private int getFeedbackFromArray() {
         int numberOfElements = 0;
         for (String[] str: computerFeedback) {
             for(String value: str) {
@@ -473,74 +428,65 @@ public class MasterMind {
         }
         return numberOfElements;
     }
-
     /**
      * SaveGuessHistory saves the accepted userInput to display it later. It saves in the 2D array.
-     * @param guess
+     * @param guess accepts a string value of userInput to add it into 2D array.
      */
     private void saveGuessHistory(String guess) {
-        guessHistory[numberOfSavedHistory][0] = userName;
-        guessHistory[numberOfSavedHistory][1] = guess;
-        numberOfSavedHistory++;
+        guessHistory[numberOfSavedGuessedHistory][0] = userName;
+        guessHistory[numberOfSavedGuessedHistory][1] = guess;
+        numberOfSavedGuessedHistory++;
     }
-
     /**
-     * GetHistory reads the saved data from RAM.
+     * GetGuessHistory reads the saved data from RAM.
      *
-     * @See #saveGuessHistory()
+     * @see #saveGuessHistory(String)
      */
-    public void getHistory() {
-        for (int i = 0; i < numberOfSavedHistory; i++) {
+    public void getGuessHistory() {
+        for (int i = 0; i < numberOfSavedGuessedHistory; i++) {
             System.out.println(guessHistory[i][0] + ", your guessed history: " + (i+1) + "  "  + guessHistory[i][1]);
         }
     }
-
     /**
      * The following methods are used to communicate with an installed instance of MySQL.
-     * The main class for MySQL is created in a seperate java file called ConnectToMySQL. This class establishes
-     * connection with mysql database then creates/reads the data.
+     * The main class for MySQL is created in a separate java file called ConnectToMySQL, but it is located in the same
+     * package. This class establishes connection with mysql database then creates/reads the data.
      *
-     * @See #Class#ConnecToMySQL
+     * @see #Class#ConnecToMySQL
      *
      */
-
     /**
      * WriteInputHistoryIntoDB saves @Field #userName and @Field #userGuess into mysql's database.
-     * @param userName
-     * @param guess
+     * @param userName accepts userName as a string value
+     * @param guess accepts userInput guess as a string value
      *
-     * @See #class#ConnectToMySQL
+     * Ref: ConnectToMySQL#writinputHistoryIntoDB
      */
     private void writeInputHistoryIntoDB(String userName, String guess) {
         ConnectToMySQL.writeInputHistoryIntoDB(userName, guess);
     }
-
     /**
      * ReadUserInputHistoryFromDB read data from mysql database.
-     * @See #writeInputHistoryIntoDB()
-     * @See #class#ConnectToMySQL
+     * @see #writeInputHistoryIntoDB(String, String) ()
      */
     private void readUserInputHistoryFromDB(){
         ConnectToMySQL.readUserInputHistoryFromDB();
     }
-
     /**
      * Reads saved feedbacks from MySQL. Check class ConnectToMySQL for the implementation.
      */
-    private void readFeedback() {
+    private void readFeedbackFromDB() {
         ConnectToMySQL.readFeedback();
     }
-
     /**
      * Writes Feedback into the table as the integer values only, so a play can compute it later.
      * @param feedback consist of the 3 variables and userName.
      *
-     * @See #play()
+     * @see #play()
      */
     public void writeFeedbackIntoDB(HashMap<String, Integer> feedback) {
         ConnectToMySQL.writeFeedbackIntoDB(feedback, userName);
     }
-
     /**
      * WriteFeedbackGuessToDB writes userName, feedback and guess as string values for easy read.
      * @param userName
@@ -550,14 +496,11 @@ public class MasterMind {
     private void writeFeedbackGuessToDB(String userName, String feedback, String guess) {
         ConnectToMySQL.writeFeedbackGuessToDB(userName, feedback, guess);
     }
-
     /**
      * Prints username, feedback and guess values form the table.
-     * @See #ConnectToMySQL#commentedSQLCommands for table names and structure.
+     * Ref: ConnectToMySQL#commentedSQLCommands for table names and structure.
      */
     private void readFeedbackGuessFromDB() {
         ConnectToMySQL.readFeedbackGuessFromDB();
     }
-
-
 }

@@ -1,15 +1,14 @@
 package main;
 
+/**
+ * This object includes the main method to run the application.
+ * @see MasterMind
+ */
 public class GameRunner {
     //runner
     public static void main(String[] args) {
-        MasterMind m = new MasterMind();
-//        System.out.println(Arrays.toString(m.generateRandomNumbers()));
-//        m.play();
+        MasterMind m = new MasterMind();;
         m.start();
-//        ConnectToMySQL.deleteDataFromTable();
-//        m.chooseDifficultyLevel();
-//        System.out.println(Arrays.toString(m.generateRandomNumbers()));
 
 
     }
