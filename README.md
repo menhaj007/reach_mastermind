@@ -118,14 +118,26 @@ Instructions on how to use them in your own application are linked below.
 | MySQL DBC Driver  |[https://github.com/menhaj007/jarsFiles/blob/main/mysql-connector-java-8.0.27.jar] |
 | Random.org API | [https://github.com/menhaj007/jarsFiles/blob/main/mysql-connector-java-8.0.27.jar] |
 | JUNIT | [https://github.com/menhaj007/jarsFiles/blob/main/org_junit_platform_junit-platform-console-standalone_1.6.0_junit-platform-console-standalone-1.6.0.jar] |
+
+There is a folder inside the project directory named jarFiles (https://github.com/menhaj007/reach_mastermind/tree/main/src/jarFiles) which includes all of the required dependencies for this project. If you clone this repository, you will have inside the project.
+
 ## Link for JavaDoc
-- Please open java-documentation link on this repo and open index.html and select preview to read the documentation for this application
+- Please open java-documentation link on this repository and open index.html then select preview or open in a browser tab to read the documentation for this application
 -- https://github.com/menhaj007/reach_mastermind/blob/main/src/JavaDocsReadMe/index.html
 ## Design of the app
 ![an image caption Source: Ultimate Funny Dog Videos Compilation 2013.](https://images.unsplash.com/photo-1638292597251-6fe6b2ba50f9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80)
 
+8. How to run the application?
+- First install Java 11, MySQL, MySQL-workbench
+- Run the provided SQL commands
+- Download the application from this repository
+- Obtain an API key from Random.org and then add the key inside the RangomGenerator.java class wher it says API key
+- Add dependencies which are provided inside this repository/project in the dependency module
+- Finally, using IntelliJ IDEA, open the GameRunner.java and click run right top-right side of the IDE.
+-- If you see red errors from the database, that means you didn't SQL commands or didn't follow instruction for jdbc driver. However, without the database function, you will be able to test and run the application, but won't able to save the feedbacks and guessed history in the database.
+
 ## Variables and Methods in the application
-#### There is a javadoc comments available inside the application, please feel free to review the code with the comments on the same page or review these bullet points.
+#### There is a java-documentation as mentioned above this paragraph that has comments regarding the application and its variables and methods and their functions. Below a list of the variables and methods just for quick reference.
 The following variables are used at global scope.
 - [computerPoints], initialized with 10. On Each correct guess, these points are deducted
 - [userPoints], initialized with the value of 10. On each wrong guess, user loses points.
@@ -156,7 +168,7 @@ The following Methods are designed to either communicate with the user or serve 
 - saveFeedbackToArray(), saves the feedback in the RAM.
 - getFeedbackFromArray() reads from RAM. If the program stop, it loses all of its data.
 - result(counter), just prints you won!
-- saveGuessHistoryToArray(String guessed), save entered values into RAM
+- saveGuessHistoryToArray(String guessed), saves entered values into RAM
 - getGuessHistoryFromArray prints them.
 
 The following parts are manual. It is user's choice to install with the application or not. This app can work with mysql. To work without MySQL connection delete all methods with "DB" letters in their signature methods.
