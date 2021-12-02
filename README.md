@@ -1,6 +1,6 @@
 # Mastermind
 #### A terminal based game.
-This is documentation is a guide on how to install and use the application. The following topics are covered:
+This documentation is a guide on how to install and use the application. The following topics are covered:
 
 - Installation
 - Technologies used
@@ -10,8 +10,8 @@ This is documentation is a guide on how to install and use the application. The 
 ## Installation
 This application is built with Java 11 and MySQL server Version 8. Furthermore, JUNIT 5 is used to test the core functions. This guide will demonstrate how to use install the required software to test and rung this Application. IntelliJ IDEA IDE is used to implement this project. If you are using Eclipse or VS-Code this instruction may not work. Since random.org provides an API for ease access to use their Random Integer generate application, you will need an API key to connect to random.org API. There are two JAR files one for MySQL dependency and another for Random Generator API inside the repository which need to be added into the project module in order to connect to MySQL and random.org’s website.
 
-- To Download Java 11, please visit => 
-https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html
+- To Download Java 11, please visit the following links->
+  https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html
 - To review Java 11 installation process, please refer to this link https://docs.oracle.com/en/java/javase/11/install/
 - To install MySQL Server community edition, please follow the following link https://dev.mysql.com/downloads/mysql/
 - For help on how to use MySQL, click on the following link https://dev.mysql.com/doc/
@@ -30,7 +30,7 @@ $: java -version
 =>: openJDK runtime Environment OS…
 =>: openJDK 64bit Server VM…
 ```
-2. Please make sure you have IntelliJ Idea installed. You can also download here ->
+2. Please make sure you have IntelliJ IDEA installed. You can also download it from here ->
    -- https://www.jetbrains.com/idea/
 3. Random API generator.
    --  You can create your own API, or can you use the temporary one available inside the project.
@@ -38,10 +38,15 @@ $: java -version
    https://github.com/menhaj007/jarsFiles
 
 This meets all the requirements to test the core feature of the application such as logic, feedback, history and output. However, if you do want to use just the core requirements, please comment out all methods in Mastermind.java where the signature includes the word “write/read from DB/IntoDB”.
-If you want to test the project with MySQL and JUNIT features, please follow the next step too.
+If you want to test the project with MySQL and JUNIT features, please follow the next couple steps too.
 
 4. Install MySQL Database from the above link. Once installed either use workbench or command line, to issue the following commands in order to create a database and make it active:
    -- change the path location for jdbc, so it matches your computer's information.
+
+```
+    DriverManager.getConnection("jdbc:mysql://localhost:3306/mastermind", "your_user_name", "your_mysql's_user_password");
+```
+
 ```
 public static void readFeedbackFromDB() {
         try {
@@ -114,17 +119,20 @@ Familiarity with the following technologies can help.
 - MySQL Workbench, MySQL terminal App.
 ## Dependencies
 Instructions on how to use them in your own application are linked below.
+```
+    stackoverflow.com/questions/30651830/use-jdbc-mysql-connector-in-intellij-idea
+```
 | Dependency | README |
 | ------ | ------ |
 | MySQL DBC Driver  |[https://github.com/menhaj007/jarsFiles/blob/main/mysql-connector-java-8.0.27.jar] |
 | Random.org API | [https://github.com/menhaj007/jarsFiles/blob/main/mysql-connector-java-8.0.27.jar] |
 | JUNIT | [https://github.com/menhaj007/jarsFiles/blob/main/org_junit_platform_junit-platform-console-standalone_1.6.0_junit-platform-console-standalone-1.6.0.jar] |
 
-There is a folder inside the project directory named jarFiles (https://github.com/menhaj007/reach_mastermind/tree/main/src/jarFiles) that includes all of the required dependencies for this project. If you clone this repository, you will have them inside the project.
+There is a folder inside the project directory named jarFiles (https://github.com/menhaj007/reach_mastermind/tree/main/src/jarFiles) that includes all the required dependencies for this project. If you clone this repository, you will have them inside the project.
 
 ## Link for Java Documentation
 - Please open java-documentation link on this repository and open index.html then select preview or open in a browser tab to read the documentation for this application
--- https://github.com/menhaj007/reach_mastermind/blob/main/src/JavaDocsReadMe/index.html
+  -- https://github.com/menhaj007/reach_mastermind/blob/main/src/JavaDocsReadMe/index.html
 
 ## Basic Diagram
 ![Tux, A basic diagram of the app](https://github.com/menhaj007/reach_mastermind/blob/main/MastermindDiagram.PNG)
@@ -133,10 +141,10 @@ There is a folder inside the project directory named jarFiles (https://github.co
 - First install Java 11, MySQL, MySQL-workbench
 - Run the provided SQL commands
 - Download the application from this repository
-- Obtain an API key from Random.org and then add the key inside the RangomGenerator.java class where it says API key
+- Obtain an API key from Random.org and then add the key inside the RandomGenerator.java class where it says API key
 - Add dependencies which are provided inside this repository/project in the dependency module
 - Finally, using IntelliJ IDEA, open the GameRunner.java and click run right top-right side of the IDE.
--- If you see red errors from the database, that means the database connection is not working properly or the SQL commands were not issued, jdbc driver path is not correct. However, without the database function, you will be able to test and run the application, but won't able to save the feedbacks and guessed history in the database.
+  -- If you see red errors from the database, that means the database connection is not working properly or the SQL commands were not issued, jdbc driver path is not correct. However, without the database function, you will be able to test and run the application, but won't able to save the feedbacks and guessed history in the database.
 
 ## Variables and Methods in the application
 #### There is a java-documentation as mentioned above this paragraph that has comments regarding the application and its variables and methods and their functions. Below a list of the variables and methods just for quick reference.
@@ -144,7 +152,7 @@ The following variables are used at global scope.
 - computerPoints, initialized with 10. On Each correct guess, these points are deducted
 - userPoints, initialized with the value of 10. On each wrong guess, user loses points.
 - difficultyLevelValue, there are 3 levels in this game. If user enters 1, the value of this variable changes to 4. Which means, the random number will consist of an array of integers with length of 4. If user's choice is 2, the array length will be 6, and 3 will consist of 8 elements. Finally, as the level of difficulty increases, the number of attempts decreases from 10, 8, to 5 tries respectively.
-- numberOfAttemps, the default value is 10. But it will change when user chooses a difficult level and if user keep guessing the number. It will reset when user agrees to play again.
+- numberOfAttempts, the default value is 10. But it will change when user chooses a difficult level and if user keep guessing the number. It will reset when user agrees to play again.
 - computerFeedback, type String, this is a 2 Dimension array. A player's feedback is copied here to the player can review either after failing the game or winning the game. This method doesn't automatically push the data to MySQL. It is just in memory access data.
 - guessHistory, type String, will hold the information about the users guesses only to keep the record cleaner for review.
 - numberOfSavedFeedback
@@ -162,7 +170,7 @@ The following Methods are designed to either communicate with the user or serve 
 - readUserInput(), in the terminal, it asks for the user to enter values.
 - start(), this function job is to record user's name at global scope. Then starts the game.
 - play(), the engine for this application. This method/function triggers other functions such as chooseDifficultyLevel(), generateRandomNumbers(), wile loop, and calculate. ...
-- calculate(arrayA, arrayB), this method takes two arrays, then compares them to determine if their values match. For instance, arrayA = {1,2,3,1}, arrayB = {1,2,3,4}. There will be three correct number on the correct location, One value 4, is incorrect because is not in the list. Since arrayA has two 1s, the exact location takes precedence over the wrong location. If arrayA = {1,2,4,3}, an arrayB = {2,1,3,4}, this will produce 4 correct numbers in the in the wrong positions. There is JUnit test written for this method, you can run your test. The difficult part in this challenge was to find the result for (true, false, false), if all matched, other two conditions will fail, if the second matched the first and last will fail, if the was true, the first two would fail. Perhaps, there many ways to solve this, but I ended up using multiple arrays then comparing the index values in both. if a match found, then replaced with a value out of the domain range in this case {x>=0}, since negative values are not not part of the domain, I keep replacing the tmpArray to keep testing. The Otherway, I thought to work on it was to use a string, if a number found the first match in the list, then increment the counter, if not, added to the string, so at the end, the string will cosist of not matched? true: false,
+- calculate(arrayA, arrayB), this method takes two arrays, then compares them to determine if their values match. For instance, arrayA = {1,2,3,1}, arrayB = {1,2,3,4}. There will be three correct number on the correct location, One value 4, is incorrect because is not in the list. Since arrayA has two 1s, the exact location takes precedence over the wrong location. If arrayA = {1,2,4,3}, an arrayB = {2,1,3,4}, this will produce 4 correct numbers in the wrong positions. There is JUnit test written for this method, you can run your test. The difficult part in this challenge was to find the result for (true, false, false), if all matched, other two conditions will fail, if the second matched the first and last will fail, if the was true, the first two would fail. Perhaps, there many ways to solve this, but I ended up using multiple arrays then comparing the index values in both. if a match found, then replaced with a value out of the domain range in this case {x>=0}, since negative values are not part of the domain, I keep replacing the tmpArray to keep testing. The other way, I thought to work on it was to use a string, if a number found the first match in the list, then increment the counter, if not, added to the string, so at the end, the string will consist of not matched? true: false,
 - guessedCorrectAndNumberLocation, it increments when two values at exact indices match in the two arrays.
 - guessedCorrectNumber, it increments when a value doesn't have an exact position match but still exist in the list. It is only match with one value, if there are two {1,1}, {1,2}, only the first correct match increments.
 - incorrectGuess, after find the correct and incorrectValueAtWrongPost, then add them then subtract from the array.length;
@@ -182,7 +190,7 @@ The following parts are optionals. It is user's choice to install with the appli
 
 
 ## Planning and implantation
-After reviewing the challenge, it was clear that the core of the assignment was finding the correct number and exact location. The steps required to solve this challenge is to draw two arrays and compare them using pen and paper or a whiteboard using a T-Table. 
+After reviewing the challenge, it was clear that the core of the assignment was finding the correct number and exact location. The steps required to solve this challenge is to draw two arrays and compare them using pen and paper or a whiteboard using a T-Table.
 
 |  randomArray       |userInput                          |result                         |
 |----------------|-------------------------------|-----------------------------|
@@ -193,7 +201,7 @@ Since each element has to have one of the following results =>
 - Correct number but wrong location (incorrect)
 - incorrect number which doesn't exist in the computer's generated list.
 
-As a result each element will require one of the the tree responses of being true/false.
+As a result each element will require one of the tree responses of being true/false.
 
 ```
 if (correctNumberAtCorrectLocation exist)
@@ -205,12 +213,11 @@ else if (correctNumberinWrongLocation)
 else
     wrongNumber = userInput.lengh - (correctNumberAtCorrectLocation+correctNumberinWrongLocation)
 ```
-There is no need to test for the third case because the first two cases will determin wheather the third case is true or false. 
+There is no need to test for the third case because the first two cases will determine whether the third case is true or false.
 
-This part of the challege consumed lots of time to solve it in a bettr way, but my solution is not good at time and space complexity. The reason is dupulicate values existance in both randomGenerate integers and in user's input. For instance ->
+This part of the challenge consumed lots of time to solve it in a better way, but my solution is not good at time and space complexity. The reason is the existence of duplicate values in both randomGenerate integers and in user's input. For instance ->
 
 ```
-case 1:
   computerGenerated = [1,1,3,4];
   userGuess = [1,3,2,4];
   for (i = 0; i < userGuess.length; i++) {
@@ -271,7 +278,7 @@ Even though the last else condition and loop looks promising there are some test
   
 ```
 
-As it can been seen the duplicates create lots of issue. To understand this game, I bought a Mastermind game with 4 pegs. I played with my kids and kept thinking about solving the duplicates. My current solution is not good, but it does the job. Here is the patter, After finding the matched numbers, store their indices and replace the value with something out of the domain range. To void modifying the array, copy both elements in a new array and keep replacing the matched values with a new value. My other thinking was to create a new string, and concatenate the unmatch values and their indices and keep remove the matched values untill no match is left. It looked pretty ugly when I did on the whiteboard. I ultimately settled with a solution which will make me happy that it does the job, but makes me feel bad, because the time and space complexity looks horrible.
+As it can be seen the duplicates create lots of issue. To understand this game, I bought a Mastermind game with 4 pegs. I played with my kids and kept thinking about solving the duplicates. My current solution is not good, but it does the job. Here is the patter, After finding the matched numbers, store their indices and replace the value with something out of the domain range. To void modifying the array, copy both elements in a new array and keep replacing the matched values with a new value. My other thinking was to create a new string, and concatenate the unwatched values and their indices and keep remove the matched values until no match is left. It looked pretty ugly when I did on the whiteboard. I ultimately settled with a solution which will make me happy that it does the job, but makes me feel bad, because the time and space complexity looks horrible.
 
 ```
         int[] tmpArrayResult = new int[difficultyLevelValue];
@@ -335,21 +342,21 @@ user:-> 3
 if this method, provides the opportunity compare the correct values, but still the challenge of duplicates will be there at some extent.
 ```
 
-I believe this part of the challenge is the hardest part. Other requirements are not too challeging.
+I believe this part of the challenge is the hardest part. Other requirements are not too challenging.
 
-### Planing for allowing user to see their guesses and feedbacks. 
+### Planing for allowing user to see their guesses and feedbacks.
 Available options:
-  > - Write user's communication to a text file. At thend read from it.
-  > - Write it in RAM memory then display the result.
-  > - Write/read to a database, so it stays there.
+> - Write user's communication to a text file. At th end read from it.
+> - Write it in RAM memory then display the result.
+> - Write/read to a database, so it stays there.
 
-  Easiest choice is to write in RAM and read it. The following object can be used to achieve this gaol.
-  Two Dimension Array: 
-  
+Easiest choice is to write in RAM and read it. The following object can be used to achieve this gaol.
+Two Dimension Array:
+
   ```
     String[][] result = [{"john"},{"input"},{"computerGenerated"}];
   ```
-  The good thing about 2D array is that saving is at a constant log(1) time. Here is why:
+The good thing about 2D array is that saving is at a constant log(1) time. Here is why:
 
   ```
     result[0][0] = userGuess;
@@ -362,25 +369,25 @@ Available options:
 
   ```
 
-  Since a counter/numberOfAttemps is used here to keep track of the attemps, it can also serve as an index location.
-  counter = 0, and ...10;
+Since a counter/numberOfAttempts is used here to keep track of the attempts, it can also serve as an index location.
+counter = 0, and ...10;
 
-  The other option is create to create a HashMap<Integer, String> and store it like this -> 
-  
+The other option is to create a HashMap<Integer, String> and store it like this ->
+
   ```
   {1: "John, you guess, [1,2,3,4] and feedback was 1 correct, 2 incorect and 1 wrong." }
   ```  
-  Perhpabs the better choice is to use a database. Thus, I used both a database and the array. The array will show the result for the current player untill the players decides to replay() which will clear the arrays and start from 0. However, the database keep a record of all players who played the game. Due to lack of initial planing, I didn't use relationship which could have been better. For instance, A paly can have many games (result, feedbacks) or many games belongs to a player. In this model, whenever a player enters a his name, the application can find and present the history.
-  The current implentation only stores the gussedValues, winHistory and userName. Duplicate names and null values are allowed.
-  A player must play first then will get his result. A function to allow a player to display all of the records hasn't been implemented, but all it needs to add a function at the start of the game which asks "Enter play to play the game, or history to see yours and others record. 
+Perhaps the better choice is to use a database. Thus, I used both a database and the array. The array will show the result for the current player until the players decides to replay() which will clear the arrays and start from 0. However, the database keep a record of all players who played the game. Due to lack of initial planing, I didn't use relationship which could have been better. For instance, A player can have many games (result, feedbacks) or many games belongs to a player. In this model, whenever a player enters his/her name, the application can find and present the history.
+The current implementation only stores the guessedValues, winHistory and userName. Duplicate names and null values are allowed.
+A player must play first then will get his result. A function to allow a player to display all the records hasn't been implemented, but all it needs to add a function at the start of the game which asks "Enter play to play the game, or history to see yours and others record".
 
-  ### Random.org, API vs get(url)
-  random.org has upgarded their system and provides free APIs up 1000/month request for certain services. Therefore using their API is a better choice rather then submiting a get-request to 
+### Random.org, API vs get(url)
+random.org has upgraded their system and provides free APIs up 1000/month request for certain services. Therefore, using their API is a better choice rather than submitting a get-request to
 
   ```
   https://www.random.org/integers/?num=8&min=0&max=7&col=1&base=10&format=plain&rnd=new
   ```
-  The reason for not chosing this method is the amount work required to converted the return text with lines to an integer array. For example, 
+The reason for not choosing this method is the amount of work required to convert the return text with lines to an integer array. For example,
 
   ```
   6
@@ -392,13 +399,13 @@ Available options:
   1
   1
   ```
-  With this result, the choices are to use regex in order to create an array without the "\n" or use a HashMap<number, "\n">  then push the keys into a new array. Thus, API is a better choice for this operation.
+With this result, the choices are to use regex in order to create an array without the "\n" or use a HashMap<number, "\n">  then push the keys into a new array. Thus, API is a better choice for this operation.
 
-  If you do want to use the above link directly, below is the code -> 
-  
+If you do want to use the above link directly, below is the code ->
+
   ```
   for (...)
-    Character.isDigit(randIntegerString.charAt(i)))
+    Character.isDigit(randomIntegers.charAt(i)))
   
   Link: => [ https://docs.oracle.com/javase/7/docs/api/java/lang/Character.html ]
 
@@ -411,13 +418,11 @@ Link: => [https://www.oracle.com/technical-resources/articles/java/regex.html]
 # Conclusion
 There are couple lessons I learned by doing this take home challenge:
 
-- I should have paraphrased the challenge and asked the recuriter to confirm my understanding of the assignment.
-- I should have decided to built the core features first in one of the languages such as Java or JavaScript that I feel comfortable.
+- I should have paraphrased the challenge and asked the recruiter to confirm my understandings. This would have helped to focus on the challenge rather than assumptions.
+- I should have decided to build the core features first in one of the languages such as Java or JavaScript that I feel comfortable.
 - I should have avoided trying to build a full stack App such as using Ruby on Rails as a backend or using Nodejs + express + MySQL, and REACT as a frontend.
-- I should have analyzed my hours because I spend 9 hours work, and other couple hours for for taking care of my children. 
-- if I had realized that I can't work more than 2 to 4 hours on the project on one sitting, I could have built a better app.
-- Documentation took longer than I expected. It is crucial to plan and reserve enough hours for documenting your work. 
-- I shouldn't have hestiated to contact my recruiter when I needed clarification.
+- I should have analyzed my hours because I spend 9 hours at work, and other couple hours for taking care of my children and family needs.
+- Documentation took longer than I expected. It is crucial to plan and reserve enough hours for documenting your work.
+- I shouldn't have hesitated to contact my recruiter when I needed clarification.
 
-
-There are couple lessons that I learned by doing this coding challenge. Since this was my first one, I sometimes spent time on deciding what I should use. Will just a web-page with css, html, and JavaScript suffice, will Nodejs + MySQL + React will be a good choice? I started doing some of each, then revisited my notes and saw that the recruiter had emphasized to use a technology based on the job you applied. At that memoment, I realized that I wasted sometime. Immediately, started planing on using Java. The first thing I thought was to build a spring-boot api, but I noticed that a player can't interact directly with the api without prior knowldge of Postman, Insomnia and etc. At the end decided a CLI app should be enough. Once the application was built, then wondered should I save the history into a file or a database, and finally decided to use MySQL because it runs on MacOS, Windows and Linux. This chanlleged thought me that best way to learn is to build. I had nevere tried to access mysql from a just a plain java application without a middleware and a server, once I did, now I know there is no limit what you can built. It only requires patience and guidance.
+Since this was my first take home challenge, I sometimes spent lots of time on deciding what I should use in terms of technology. Will just a web-page with css, html, and JavaScript suffice? Will Nodejs + MySQL + React will be a good choice? I started doing some of each, then revisited my notes and saw that the recruiter had emphasized to use a technology based on the job you applied. At that moment, I realized that I wasted sometime. Immediately, I started planing on using Java. The first thing I thought was to build a spring-boot API, but I noticed that a player can't interact directly with the API without a prior knowledge of Postman, Insomnia and other API testing applications. At the end, I thought a CLI application should be enough, if I have time left then will take it further. Once the application was built, then wondered should I save the history into a file or a database, and finally decided to use MySQL because it runs on MacOS, Microsoft Windows and Linux. This challenge thought me that best way to learn is to build. It only requires patience and guidance.
