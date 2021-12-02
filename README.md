@@ -124,8 +124,9 @@ There is a folder inside the project directory named jarFiles (https://github.co
 ## Link for JavaDoc
 - Please open java-documentation link on this repository and open index.html then select preview or open in a browser tab to read the documentation for this application
 -- https://github.com/menhaj007/reach_mastermind/blob/main/src/JavaDocsReadMe/index.html
+
 ## Design of the app
-![an image caption Source: Ultimate Funny Dog Videos Compilation 2013.](https://images.unsplash.com/photo-1638292597251-6fe6b2ba50f9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80)
+- updates...
 
 8. How to run the application?
 - First install Java 11, MySQL, MySQL-workbench
@@ -171,7 +172,7 @@ The following Methods are designed to either communicate with the user or serve 
 - saveGuessHistoryToArray(String guessed), saves entered values into RAM
 - getGuessHistoryFromArray prints them.
 
-The following parts are manual. It is user's choice to install with the application or not. This app can work with mysql. To work without MySQL connection delete all methods with "DB" letters in their signature methods.
+The following parts are optionals. It is user's choice to install with the application or not. This app can work with mysql. To work without MySQL connection delete all methods with "DB" letters in their signature methods.
 - writeInputHistoryINtoDB(String userName, String guess), write the user input with its in the database for future access.
 - I was tempted to use one -> many relationship. A user can have many guesses, but due to the time constraints, I left it behind.
 - There is no relationship model in this app. It just saves data and if need can delete them too.
