@@ -126,7 +126,7 @@ There is a folder inside the project directory named jarFiles (https://github.co
 -- https://github.com/menhaj007/reach_mastermind/blob/main/src/JavaDocsReadMe/index.html
 
 ## Design of the app
-- updates...
+![Tux, A basic diagram of the app](https://github.com/menhaj007/reach_mastermind/blob/main/MastermindDiagram.PNG)
 
 8. How to run the application?
 - First install Java 11, MySQL, MySQL-workbench
