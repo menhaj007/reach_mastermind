@@ -28,8 +28,6 @@ public class ConnectToMySQL {
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mastermind", "menhajsharaf", "helloworld.com");
             Statement statement = connection.createStatement();
-//            statement.execute("DROP TABLE IF EXISTS user_result CASCADE;");
-//            statement.execute("CREATE TABLE UUID_TEST (id INT, user_name VARCHAR(25), result VARCHAR(500))");
             String sqlCommand = "INSERT INTO computer_feedback (userName, correctNumberLocation, correctNumberOnly, incorrectGuess)" + "VALUES ('" + userName + "'" + "," +"'"+ userFeedbackObj.get("correctNumberLocation") +"'" +"," +"'"+ userFeedbackObj.get("correctNumberOnly") +"'"+ "," + userFeedbackObj.get("incorrectGuess") + ")";
             ResultSet resultSet = statement.executeQuery("SELECT * FROM computer_feedback");
             //statement.executeQuery(sqlCommand);
@@ -44,11 +42,7 @@ public class ConnectToMySQL {
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mastermind", "menhajsharaf", "helloworld.com");
             Statement statement = connection.createStatement();
-//            statement.execute("DROP TABLE IF EXISTS user_result CASCADE;");
-//            statement.execute("CREATE TABLE UUID_TEST (id INT, user_name VARCHAR(25), result VARCHAR(500))");
             String sqlCommand = "INSERT INTO user_input_history (userName, userInput)" + "VALUES ('"+ userNameValue +"'"+ "," + resultValue + ")";
-//            ResultSet resultSet = statement.executeQuery("SELECT * FROM user_result");
-//            statement.executeQuery(sqlCommand);
             statement.executeUpdate(sqlCommand);
             connection.close();
         } catch (Exception e) {
