@@ -24,19 +24,20 @@ public class MasterMind {
     public MasterMind() {}
     /**
      * Accepts user input in command line.
-     * @Field #userInput built-in library which accepts userInput.
+     *
+     * userInput built-in library which accepts userInput.
      *
      * @see #start()
      * @see #play()
      */
     Scanner userInput = new Scanner(System.in);
-    /** @Field #computerPoints at the beginning each has 10 */
+    /**  #computerPoints at the beginning each has 10 */
     double computerPoints = 10;
-    /** #Field #userPoints if user guesses wrong numbers points will be deducted.*/
+    /** Field, userPoints if user guesses wrong numbers points will be deducted.*/
     double userPoints = 10;
-    /** @Field #difficultyLevelValue this variable defines the number of random generated values. Default is 4.*/
+    /**  #difficultyLevelValue this variable defines the number of random generated values. Default is 4.*/
     private  int difficultyLevelValue = 4;
-    /**@Field #numberOfAttemps if a user can't win in 10 attempts, game will stop.*/
+    /** #numberOfAttemps if a user can't win in 10 attempts, game will stop.*/
     int numberOfAttempts = 10;
     /**
      * It generates a 2D array to store the computer's generated feedback for later access.
@@ -53,22 +54,22 @@ public class MasterMind {
      */
     String[][] guessHistory = new String[10][2];
     /**
-     * @Field #numberOfSavedFeedback increments the index location to keep track of the inserted elements
+     * #numberOfSavedFeedback increments the index location to keep track of the inserted elements
      * to avoid unnecessary loop for empty/null elements in the array.
      */
     int numberOfSavedFeedback = 0;
-    /** @Field #numberOfSavedGuessedHistory increments the index location to keep track of addition to the array */
+    /**  #numberOfSavedGuessedHistory increments the index location to keep track of addition to the array */
     int numberOfSavedGuessedHistory = 0;
     /**
-     * @Field #userName when the game starts, it records for the player's name to save it in the database with the result.
+     *  #userName when the game starts, it records for the player's name to save it in the database with the result.
      * It only changes when console re-runs.
      */
     String userName = "";
     /**
-     * @Field #userId the intention was to build a one to many relationship for mysql and use UserId to connect them.
+     *  #userId the intention was to build a one to many relationship for mysql and use UserId to connect them.
      * But due to the time constrains, it is not implemented.
      */
-    /** @Field #isWin is used to keep track of the game, if a player wins then it becomes false and loop stops. */
+    /**  #isWin is used to keep track of the game, if a player wins then it becomes false and loop stops. */
     boolean isWin = false;
     /**
      * Starts the game by asking the user's name and saves it at global scope, then calls play() method to start the actual logic.
@@ -96,8 +97,8 @@ public class MasterMind {
         System.out.println("Computer generating a random number");
         int[] computerGeneratedNumbers = generateRandomNumbers();
         /** Below print is used for dev testing only */
-        System.out.println("Computer generated " + Arrays.toString(computerGeneratedNumbers));
-//        Countdown.startCountdown();
+        /** System.out.println("Computer generated " + Arrays.toString(computerGeneratedNumbers)); */
+        /** Countdown.startCountdown(); */
         int counter = 0;
         while (!isWin && numberOfAttempts > 0) {
             System.out.println("You have " + numberOfAttempts + " attempts left.");
@@ -108,15 +109,27 @@ public class MasterMind {
                 isWin = true;
                 System.out.println(result(counter));
                 numberOfAttempts = 10;
+                userPoints += 1;
+                System.out.println("You earned " + userPoints);
+                computerPoints--;
                 System.out.println("Would like to play again? Yes, No, or type history.");
                 String checkResponse = userInput.next();
                 isPlayAgain(checkResponse);
             }
             getFeedbackFromArray();
+            userPoints--;
+            computerPoints++;
             if (counter > 3) {
                 hint(computerGeneratedNumbers);
             }
             numberOfAttempts--;
+            if (numberOfAttempts == 0) {
+                System.out.println("You lost.");
+                System.out.println("Computer earns " + computerPoints);
+                System.out.println("Would like to play again? Yes, No, or type history.");
+                String checkResponse = userInput.next();
+                isPlayAgain(checkResponse);
+            }
             counter++;
         }
         getGuessHistory();
@@ -128,8 +141,10 @@ public class MasterMind {
      *
      * @see #generateRandomNumbers()
      * @see #difficultyLevelValue
+     *
+     * @return #difficultyLevelValue. Used for testing purpose only
      */
-    public void chooseDifficultyLevel() {
+    public int chooseDifficultyLevel() {
         boolean valid = false;
         do {
             System.out.println("Please select the difficulty level. \n" +
@@ -152,9 +167,13 @@ public class MasterMind {
                 System.out.println("Invalid value, please try again");
             }
         } while (!valid);
+        return difficultyLevelValue;
     }
     /** It makes a get request to generate random numbers. The size of the request is impacted by
      * @see #chooseDifficultyLevel()
+     *
+     * @return #computerGeneratedNumbers Array of integers.
+     *
      * */
     public int[] generateRandomNumbers() {
         int n = 4, max = 7, min = 0;
@@ -214,30 +233,31 @@ public class MasterMind {
     }
     /**
      * Calculate accepts two arrays, one randomNumbers generated by the computer and the converted userGuess. It then compares both by indices.
-     * If exact value matches an exact index, then it increments @Field #guessedCorrectAndNumberLocation,
+     * If exact value matches an exact index, then it increments  #guessedCorrectAndNumberLocation,
      * it only increments when two values at exact indices match in the two arrays.
      *
      * If the first case fails, then it tries to find a exact number in the randomGenerated list.
-     * It increments @Field #guessedCorrectNumber, when a value doesn't have an exact position match but still exist in the list.
+     * It increments  #guessedCorrectNumber, when a value doesn't have an exact position match but still exist in the list.
      *
      * Exact digit and index position has precedence over others. The first match has precedence over second math.
      * It is only match with one value, if there are two {1,1}, {1,2}, only the first correct match increments.
      *
-     * @param #computerGeneratedNumbers
-     * @param #userGuess
+     * computerGeneratedNumbers
+     * userGuess
+     *
      * @return integer correct guess with correct index location which determines if a player wins/loses the game.
      * @see #play()
      * @see #getGuessHistory() ()
      * @see #getFeedbackFromArray() ()
      * @see #saveFeedbackToArray(int, String, String, String) ()
-     * @Field #guessedCorrectAndNumberLocation keeps track of the correct number and its matched index location.
-     * @Field #guessedCorrectNumber keep track of a number which exist both user's input and computer's random generated number
-     * @Field #incorrectGuess if the first two conditions are false, then it is true. userGuess.length - (guessedCorrectAndNumberLocation+ guessedCorrectNumber)
-     * @Field #exactMatchedFoundInBothArrays
-     * @Field #mathed a user's input element matched with an element in the computer generated list.
-     * @Field #tmpComputerGeneratedCode copies the data from the original computer generated to modified it when iterating.
-     * @Field #tmpUserGuess copies the data from the original user's input to modified it when iterating.
-     * @Field #objResult copies the digits into the database for later use.
+     *  #guessedCorrectAndNumberLocation keeps track of the correct number and its matched index location.
+     *  #guessedCorrectNumber keep track of a number which exist both user's input and computer's random generated number
+     *  #incorrectGuess if the first two conditions are false, then it is true. userGuess.length - (guessedCorrectAndNumberLocation+ guessedCorrectNumber)
+     *  #exactMatchedFoundInBothArrays
+     *  #mathed a user's input element matched with an element in the computer generated list.
+     *  #tmpComputerGeneratedCode copies the data from the original computer generated to modified it when iterating.
+     *  #tmpUserGuess copies the data from the original user's input to modified it when iterating.
+     *  #objResult copies the digits into the database for later use.
      * @see #writeFeedbackIntoDB(HashMap)
      * @see #saveFeedbackToArray(int, String, String, String) () writes in the RAM memory.
      * @see #writeInputHistoryIntoDB(String, String) ()
@@ -348,7 +368,7 @@ public class MasterMind {
      * @param array accepts an array and returns the min and max values.
      * @return an array with two indices a[0] = min, a[1] = max. The only purpose for this return is to test the function.
      */
-    private int[] hint(int[] array) {
+    public int[] hint(int[] array) {
         int[] tmpArr = new int[2];
         int maximum = array[0];
         int minimum = array[0];
@@ -368,12 +388,12 @@ public class MasterMind {
     /**
      * ResetHistory, resets the history when a player wins then tries to play again, therefore, the following variables are
      * affected with this method.
-     * @Field #numberOfAttempts
-     * @Field #numberOfSavedFeedback
-     * @Field #numberOfSavedHistory
-     * @Field #isWin
-     * @Field #computerFeedback
-     * @Field #guessHistory
+     *  #numberOfAttempts
+     *  #numberOfSavedFeedback
+     *  #numberOfSavedHistory
+     *  #isWin
+     *  #computerFeedback
+     *  #guessHistory
      *
      * @see #play()
      * @see #isPlayAgain(String)
@@ -456,7 +476,7 @@ public class MasterMind {
      *
      */
     /**
-     * WriteInputHistoryIntoDB saves @Field #userName and @Field #userGuess into mysql's database.
+     * WriteInputHistoryIntoDB saves  #userName and  #userGuess into mysql's database.
      * @param userName accepts userName as a string value
      * @param guess accepts userInput guess as a string value
      *
