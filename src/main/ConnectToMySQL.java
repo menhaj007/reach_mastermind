@@ -12,7 +12,7 @@ import java.util.UUID;
 public class ConnectToMySQL {
     public static void readFeedback() {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mastermind", "menhajsharaf", "helloworld.com");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mastermind", "", "");
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM computer_feedback");
             while (resultSet.next()) {
